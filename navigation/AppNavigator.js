@@ -5,13 +5,15 @@ import MainTabNavigator from './MainTabNavigator';
 import AuthNavigator from './AuthNavigator';
 import TestNav from '../screens/TestNav';
 
-export default createAppContainer(TestNav
-  
+export default createAppContainer(
+
+  TestNav
+
   //createSwitchNavigator({
-   
- //   Auth: AuthNavigator,
-   // Main: MainTabNavigator,
-   
- // })
+
+  //   Auth: AuthNavigator,
+  // Main: MainTabNavigator,
+
+  // })
 );
 

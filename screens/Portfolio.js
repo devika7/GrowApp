@@ -1,23 +1,106 @@
 //import * as WebBrowser from 'expo-web-browser';
 import React from 'react';
-import {
-  Platform,
-  ScrollView,
-  StyleSheet,
-  Text,
-  View,
-} from 'react-native';
+import { Platform, StyleSheet, Text, View, ActivityIndicator, TouchableOpacity, FlatList, Alert } from 'react-native';
+//import { MonoText } from '../components/StyledText';
 
-import { MonoText } from '../components/StyledText';
+export default class Portfolio extends React.Component {
+  static navigationOptions = ({ navigation }) => {
+    return {
+      title: "Portfolio",
+      header: null,
+    };
+  };
 
-export default function Portfolio() {
-  return (
-    <View style={styles.container}>
+  constructor(props) {
+    super(props);
+    this.state = {
+      loading: true,
+      PortfolioSource: []
+    };
+  }
+
+  componentDidMount() {
+    fetch("http://127.0.0.1:8000/portfolios/")
+      .then(response => response.json())
+      .then((responseJson) => {
+        this.setState({
+          loading: false,
+          PortfolioSource: responseJson
+        })
+      })
+      .catch(error => console.log(error)) //to catch the errors if any
+  }
+
+  FlatListItemSeparator = () => {
+    return (
+      <View style={{
+        height: .5,
+        width: "100%",
+        backgroundColor: "rgba(0,0,0,0.5)",
+      }}
+      />
+    );
+  }
+
+
+
+
+  //goToNextScreen = () => {
+  //this.props.navigation.navigate('Details');
+  //  this.props.navigation.push('Details', { portid: data.item.id })
+
+  //}
+
+  renderItem = (data) =>
+    <TouchableOpacity style={styles.list} onPress={() => this.props.navigation.push('Details', { portid: data.item.id })} >
+      <Text style={styles.lightText}>{data.item.id}</Text>
+      <Text style={styles.lightText}>{data.item.portfolio_id}</Text>
+      <Text style={styles.lightText}>{data.item.name}</Text>
+      <Text style={styles.lightText}>{data.item.description}</Text>
+      <Text style={styles.lightText}>{data.item.gains}</Text></TouchableOpacity>
+
+  render() {
+    if (this.state.loading) {
+      return (
+        <View style={styles.loader}>
+          <ActivityIndicator size="large" color="#0c9" />
+        </View>
+      )
+    }
+    return (
+      <View style={styles.container}>
+        <FlatList
+          data={this.state.PortfolioSource}
+          ItemSeparatorComponent={this.FlatListItemSeparator}
+          renderItem={item => this.renderItem(item)}
+          keyExtractor={item => item.id.toString()}
+
+        />
+
+      </View>
+    )
+  }
+
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/*  return ( <View style={styles.container}>
       <ScrollView style={styles.container}
-        contentContainerStyle= {styles.contentContainer}>
-         <View>
+        contentContainerStyle={styles.contentContainer}>
+        <View>
           <Text style={styles.getStartedText}> Get started by opening</Text>
-
           <View
             style={[styles.codeHighlightContainer, styles.PortfolioFilename]}>
             <MonoText>screens/Portfolio.js</MonoText>
@@ -28,21 +111,25 @@ export default function Portfolio() {
           </Text>
         </View>
 
-        
+
       </ScrollView>
     </View>
+
+
   );
-}
-Portfolio.navigationOptions = {
-  header: null,
-};
+  */
+
+
+
+
+
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: '#fff',
   },
-  
+
   contentContainer: {
     paddingTop: 30,
   },
@@ -51,7 +138,7 @@ const styles = StyleSheet.create({
     marginTop: 10,
     marginBottom: 20,
   },
-  
+
   getStartedContainer: {
     alignItems: 'center',
     marginHorizontal: 50,
@@ -94,10 +181,17 @@ const styles = StyleSheet.create({
     backgroundColor: '#fbfbfb',
     paddingVertical: 20,
   },
-  
+  list: {
+    paddingVertical: 4,
+    margin: 5,
+    backgroundColor: "#fff"
+  },
+
   navigationFilename: {
     marginTop: 5,
   },
-  
-  
+
+
 });
+
+

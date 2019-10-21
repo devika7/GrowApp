@@ -1,52 +1,61 @@
-
-
-
 import React from 'react'
 import { StyleSheet, Text, TextInput, View, Button } from 'react-native'
 import firebase from 'firebase';
+import axios from 'axios';
+
+export default class SignupScreen extends React.Component {
+
+  state = {
+    email: '',
+    password: '', errorMessage: null
+  }
 
 
-export default class SignupScreen extends React.Component{
-
-  state = { email: '', 
-  password:'', errorMessage:null
-}
-
-
-
-
-//handleSignUp = () => {
-//   const {email, password} =this.state
- // firebase
+  //handleSignUp = () => {
+  //   const {email, password} =this.state
+  // firebase
   ///  .auth()
-   // .createUserWithEmailAndPassword(this.state.email, this.state.password)
-   // .then(() => this.props.navigation.navigate('Main'))
-   // .catch(error => this.setState({ errorMessage: error.message }))
-//}
+  // .createUserWithEmailAndPassword(this.state.email, this.state.password)
+  // .then(() => this.props.navigation.navigate('Main'))
+  // .catch(error => this.setState({ errorMessage: error.message }))
+  //}
 
 
 
- SignUpButtonPress= () => 
- {
-      const {email, password} =this.state
-      firebase.auth().createUserWithEmailAndPassword(email, password)
+  SignUpButtonPress = () => {
+    const { email, password } = this.state
+    firebase.auth().createUserWithEmailAndPassword(email, password)
       .then(user => this.props.navigation.navigate('Login'))
 
       .catch(error => this.setState({ errorMessage: error.message }))
 
- }
-  
-  render ()
-  {
-  return (
+    //this.HandleRequest.bind(this);
+    const payload = { username: this.state.email, email: this.state.email, password: this.state.password }
+    axios
+      .post(`http://127.0.0.1:8000/auth/register`, payload)
+      .then(response => {
+        const { token, user } = response.data;
+
+        // We set the returned token as the default authorization header
+        axios.defaults.headers.common.Authorization = `Token ${token}`;
+
+      })
+      .catch(error => console.log(error));
+
+  }
 
 
-    <View style={styles.container}>
+  render() {
+    return (
+
+
+      <View style={styles.container}>
         <Text>Sign Up</Text>
         {this.state.errorMessage &&
           <Text style={{ color: 'red' }}>
             {this.state.errorMessage}
           </Text>}
+
         <TextInput
           placeholder="Email"
           autoCapitalize="none"
@@ -81,40 +90,40 @@ export default class SignupScreen extends React.Component{
 
 
 
-    /*
-    <ScrollView>
-    <Container style = {styles.container}>
-         <Content>
-           <Form>
-              <Item floatingLabel>
-                <Label> Email Address</Label>
-                <Input placeholder = "Myemail"autoCapitalize = "none" autoCorrect ={false} onChangeText ={email =>this.setState({email})} 
-                value ={this.state.email}/>
-                </Item>
-                
+      /*
+      <ScrollView>
+      <Container style = {styles.container}>
+           <Content>
+             <Form>
                 <Item floatingLabel>
-                <Label> Password</Label>
-                <Input placeholder = "Mypassword" secureTextEntry = {true} onChangeText ={password=>this.setState({password})}
-                value = {this.state.password}/>
-              </Item>
-              <Button success info onPress = {this.SignUpButtonPress}>
-                <Text> SignUp </Text>
-
-              </Button>
-              <Button success info onPress = {this.props.navigation.navigate('LoginScreen')}>
-                <Text> Already have an account? </Text>
-
-              </Button>
-            
-
-           </Form>
-        </Content>
-    </Container>
-      
-    </ScrollView>
-    */
-);
-}
+                  <Label> Email Address</Label>
+                  <Input placeholder = "Myemail"autoCapitalize = "none" autoCorrect ={false} onChangeText ={email =>this.setState({email})} 
+                  value ={this.state.email}/>
+                  </Item>
+                  
+                  <Item floatingLabel>
+                  <Label> Password</Label>
+                  <Input placeholder = "Mypassword" secureTextEntry = {true} onChangeText ={password=>this.setState({password})}
+                  value = {this.state.password}/>
+                </Item>
+                <Button success info onPress = {this.SignUpButtonPress}>
+                  <Text> SignUp </Text>
+  
+                </Button>
+                <Button success info onPress = {this.props.navigation.navigate('LoginScreen')}>
+                  <Text> Already have an account? </Text>
+  
+                </Button>
+              
+  
+             </Form>
+          </Content>
+      </Container>
+        
+      </ScrollView>
+      */
+    );
+  }
 
 }
 SignupScreen.navigationOptions = {

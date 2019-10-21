@@ -1,11 +1,12 @@
 import React from 'react';
 import { Platform } from 'react-native';
-import {createStackNavigator, createBottomTabNavigator } from 'react-navigation';
+import { createStackNavigator, createBottomTabNavigator } from 'react-navigation';
 
 import TabBarIcon from '../components/TabBarIcon';
 import Portfolio from '../screens/Portfolio';
-import Investments from '../screens/Investments';
+import Themes from '../screens/Themes';
 import Profile from '../screens/Profile';
+import PortfolioDetails from '../screens/PortfolioDetails';
 
 
 const config = Platform.select({
@@ -16,6 +17,8 @@ const config = Platform.select({
 const HomeStack = createStackNavigator(
   {
     Home: Portfolio,
+    PortfolioDetails: PortfolioDetails
+
   },
   config
 );
@@ -38,13 +41,13 @@ HomeStack.path = '';
 
 const LinksStack = createStackNavigator(
   {
-    Links: Investments,
+    Links: Themes,
   },
   config
 );
 
 LinksStack.navigationOptions = {
-  tabBarLabel: 'Investments',
+  tabBarLabel: 'Themes',
   tabBarIcon: ({ focused }) => (
     <TabBarIcon focused={focused} name={Platform.OS === 'ios' ? 'ios-link' : 'md-link'} />
   ),

@@ -4,27 +4,28 @@ import SignupScreen from "./SignupScreen";
 import ResetPassScreen from "./ResetPassScreen";
 import WelcomeScreen from "./WelcomeScreen";
 import Logout from "./Logout";
-import Investments from "./Investments";
+import Themes from "./Themes";
 import Profile from "./Profile";
 import LoginScreen from "./LoginScreen";
+import PortfolioDetails from './PortfolioDetails';
+//import PortfolioDetails1 from './PortfolioDetails1';
+import { createStackNavigator, createBottomTabNavigator } from 'react-navigation';
 
-import {createStackNavigator, createBottomTabNavigator } from 'react-navigation';
 
 export const TestNav = createStackNavigator(
     {
 
-
-       Signup: {
+        Signup: {
             screen: SignupScreen,
-            
+
         },
         Login: {
-           screen: WelcomeScreen,
+            screen: WelcomeScreen,
             screen: LoginScreen,
         },
-        
+
         Reset: {
-            screen:ResetPassScreen,
+            screen: ResetPassScreen,
         },
 
         MainTabNavigator: {
@@ -35,22 +36,30 @@ export const TestNav = createStackNavigator(
                             {
                                 Overview: {
                                     screen: Portfolio,
+
                                 },
-                               
+                                Details: {
+                                    screen: PortfolioDetails,
+
+                                }
+
                             },
+
                             {
                                 headerMode: 'none',
+
                             }
                         )
+
                     },
-                    Investments: {
-                       
+                    Themes: {
+
                         screen: createStackNavigator(
                             {
-                               Investments: {
-                                    screen: Investments,
+                                Themes: {
+                                    screen: Themes,
                                 },
-                                
+
                             },
                             {
                                 headerMode: 'none',
@@ -69,7 +78,7 @@ export const TestNav = createStackNavigator(
                         // ...                         
                     }),
                     tabBarOptions: {
-                       // ...
+                        // ...
                     },
                 }
             )
