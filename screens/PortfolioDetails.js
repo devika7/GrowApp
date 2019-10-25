@@ -1,5 +1,5 @@
 import React from 'react';
-import { Platform, StyleSheet, Text, View, ActivityIndicator, TouchableOpacity, FlatList, Button, Alert } from 'react-native';
+import { Platform, StyleSheet, Text, View, ActivityIndicator, TouchableOpacity, FlatList, Button } from 'react-native';
 
 
 export default class PortfolioDetails extends React.Component {
@@ -27,21 +27,23 @@ export default class PortfolioDetails extends React.Component {
     componentDidMount() {
 
 
-        fetch(`http://127.0.0.1:8000/stocks/`)
+        fetch(`http://127.0.0.1:8000/stocks/?portfolioid=${this.props.navigation.state.params.portid}`)
             .then(response => response.json())
             .then((responseJson) => {
                 //this.setState({
                 //  loading: false,
                 // PortfolioDetailsdataSource: responseJson
-
+                console.log(responseJson);
                 this.setState({
                     loading: false,
                     // portfolioDetailsDataSource: responseJson.filter(responseJson => contains(responseJson.portfolio) === this.props.navigation.state.params.portid)
 
                     portfolioDetailsDataSource: responseJson
-                })
 
+                })
             })
+
+
             .catch(error => console.log(error)) //to catch the errors if any
     }
 
@@ -73,9 +75,7 @@ export default class PortfolioDetails extends React.Component {
             <Text style={styles.lightText}>{data.item.YTD}</Text>
             <Text style={styles.lightText}>{data.item.OneYear}</Text>
             <Text style={styles.lightText}>{data.item.TwoYear}</Text>
-            <Text style={styles.lightText}>{data.item.TTM_Sales_Growth}</Text>
-            <Text style={styles.lightText}>{data.item.PE_Ratio}</Text>
-            <Text style={styles.lightText}>{data.item.portfolio}</Text>
+
 
         </TouchableOpacity>
 
@@ -84,7 +84,6 @@ export default class PortfolioDetails extends React.Component {
 
     render() {
 
-        // Alert.alert(this.state.PortfolioDetailsdataSource.portfolio);
 
         if (this.state.loading) {
             return (
@@ -101,9 +100,6 @@ export default class PortfolioDetails extends React.Component {
                 <FlatList
 
                     data={this.state.PortfolioDetailsdataSource}
-                    //data={this.state.PortfolioDetailsdataSource.find(item => item.portfolio === this.props.navigation.state.params.portid)}
-                    //  data={this.selectData(item)}
-
                     ItemSeparatorComponent={this.FlatListItemSeparator}
                     renderItem={item => this.renderItem(item)}
                     keyExtractor={item => item.id.toString()}

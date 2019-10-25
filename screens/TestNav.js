@@ -7,8 +7,9 @@ import Logout from "./Logout";
 import Themes from "./Themes";
 import Profile from "./Profile";
 import LoginScreen from "./LoginScreen";
-import PortfolioDetails from './PortfolioDetails';
+//import PortfolioDetails from './PortfolioDetails';
 //import PortfolioDetails1 from './PortfolioDetails1';
+import Stocks from './Stocks';
 import { createStackNavigator, createBottomTabNavigator } from 'react-navigation';
 
 
@@ -39,7 +40,7 @@ export const TestNav = createStackNavigator(
 
                                 },
                                 Details: {
-                                    screen: PortfolioDetails,
+                                    screen: Stocks,
 
                                 }
 
