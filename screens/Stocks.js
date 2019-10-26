@@ -1,8 +1,14 @@
 import React from 'react';
-import { Platform, StyleSheet, Text, View, ActivityIndicator, TouchableOpacity, FlatList, Button, Card } from 'react-native';
+import { Platform, StyleSheet, Text, View, ActivityIndicator, TouchableOpacity, FlatList, Button, TextInput } from 'react-native';
+import axios from 'axios';
+
+
 
 
 export default class Stocks extends React.Component {
+
+
+
     static navigationOptions = ({ navigation }) => {
         return {
             title: "Stocks",
@@ -10,12 +16,16 @@ export default class Stocks extends React.Component {
         };
     };
 
+
+
     constructor(props) {
         super(props);
         this.state = {
             loading: true,
-            Stocks: []
+            Stocks: [],
+            amount: ''
         };
+        //this.handleAmountChange = this.handleAmountChange.bind(this);
     }
 
     componentDidMount() {
@@ -43,12 +53,69 @@ export default class Stocks extends React.Component {
     }
 
     goToPrevScreen = () => {
+
+
         this.props.navigation.goBack();
     }
 
     buyPortfolio = () => {
+        /* axios.post('http://127.0.0.1:8000/holdings/',
+             {
+                 headers: {
+                     'Accept': 'application/json',
+                     'Content-Type': 'application/json',
+                     'Authorization': `${axios.defaults.headers.common.Authorization}`
+                 },
+                 data: {
+                     'allocation': `${this.state.amount}`,
+                     'portfolio': `${this.props.navigation.state.params.portid}`
+                 }
+ 
+             })
+             .then((res) => {
+                 console.log("RESPONSE ==== : ", res);
+             })
+             .then((response) => {
+                 console.log("response is ", response);
+             })
+             .catch(error => console.log(error));
+         */
+
+        fetch('http://127.0.0.1:8000/holdings/', {
+            method: "POST",
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json',
+                'Authorization': `${axios.defaults.headers.common.Authorization}`
+            },
+            body: JSON.stringify({
+                'allocation': `${this.state.amount}`,
+                'portfolio': `${this.props.navigation.state.params.portid}`
+            })
+        })
+            .then((res) => {
+                console.log("RESPONSE ==== : ", res);
+            })
+            .then((response) => {
+                console.log("response is ", response);
+            })
+            .catch(error => console.log(error));
+
+
+
+
+
+
+
+
+
+
 
     }
+
+
+
+
 
 
     renderItem = (data) =>
@@ -59,6 +126,9 @@ export default class Stocks extends React.Component {
             <Text style={styles.lightText}>{data.item.YTD}</Text>
         </TouchableOpacity>
 
+
+
+
     render() {
         if (this.state.loading) {
             return (
@@ -67,6 +137,9 @@ export default class Stocks extends React.Component {
                 </View>
             )
         }
+
+
+
         return (
             <View style={styles.container}>
                 <FlatList
@@ -76,6 +149,18 @@ export default class Stocks extends React.Component {
                     keyExtractor={item => item.id.toString()}
 
                 />
+
+
+
+
+                <TextInput
+                    placeholder="Amount"
+                    style={{ borderColor: 'black', borderWidth: 1 }}
+                    onChangeText={amount => this.setState({ amount })}
+                    value={this.state.amount}
+
+                />
+
                 <Button
                     onPress={() => this.buyPortfolio()}
                     title="Buy Portfolio"
@@ -97,6 +182,12 @@ export default class Stocks extends React.Component {
 
 
 
+//<TextInput
+//placeholder="Amount"
+//style={{ borderColor: 'black', borderWidth: 1 }}
+//onChangeText={}
+//value={}
+///> 
 
 
 
